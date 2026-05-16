@@ -39,6 +39,7 @@ def load_data(file_path: str) -> pd.DataFrame:
         logging.error('Unexpected error occurred while loading the data: %s', e)
         raise
 
+
 def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: int) -> tuple:
     """Apply Count Vectorizer to the data."""
     try:
@@ -59,13 +60,18 @@ def apply_bow(train_data: pd.DataFrame, test_data: pd.DataFrame, max_features: i
         test_df = pd.DataFrame(X_test_bow.toarray())
         test_df['label'] = y_test
 
-        pickle.dump(vectorizer, open('models/vectorizer.pkl', 'wb'))
+        # Ensure directory structure exists before writing artifact
+        os.makedirs('models', exist_ok=True)
+        with open('models/vectorizer.pkl', 'wb') as f:
+            pickle.dump(vectorizer, f)
+
         logging.info('Bag of Words applied and data transformed')
 
         return train_df, test_df
     except Exception as e:
         logging.error('Error during Bag of Words transformation: %s', e)
         raise
+
 
 def save_data(df: pd.DataFrame, file_path: str) -> None:
     """Save the dataframe to a CSV file."""
