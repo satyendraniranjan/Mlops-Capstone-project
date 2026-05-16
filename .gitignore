@@ -191,3 +191,5 @@ cython_debug/
 .pypirc
 cred.txt
 atlas
+data/
+models/
